@@ -1,0 +1,13 @@
+img01.jpg 13
+img02.jpg 10
+img03.jpg 4
+img04.jpg 3.2
+img05.jpg 1
+img06.jpg 0.8
+img07.jpg 0.3
+img08.jpg 1/4
+img09.jpg 1/60
+img10.jpg 1/80
+img11.jpg 1/320
+img12.jpg 1/400
+img13.jpg 1/1000
