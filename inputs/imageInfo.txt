@@ -5,9 +5,9 @@ img04.jpg 3.2
 img05.jpg 1
 img06.jpg 0.8
 img07.jpg 0.3
-img08.jpg 1/4
-img09.jpg 1/60
-img10.jpg 1/80
-img11.jpg 1/320
-img12.jpg 1/400
-img13.jpg 1/1000
+img08.jpg .25
+img09.jpg .01666666
+img10.jpg .0125
+img11.jpg .003125
+img12.jpg .0025
+img13.jpg .001
