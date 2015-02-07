@@ -14,7 +14,6 @@ for y = 1:imageY
         gs = images(:, y, x, 2);
         bs = images(:, y, x, 3);
         
-        
         % get radiance for colors
         dispic(y,x,1) = getRadiance(gR,t,rs);
         dispic(y,x,2) = getRadiance(gG,t,gs);

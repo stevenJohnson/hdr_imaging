@@ -4,15 +4,22 @@ function [ e ] = getRadiance( g, t, zs )
 %   t is the array of shutter speeds
 %   zs is the array of intensities for that pixel location
 
+
+% num = 0;
+% denom = 0;
+% for i = 1:size(t,1)
+%     num = num + (weight(zs(i)) * (g(zs(i)+1) - t(i)));
+%     denom = denom + weight(zs(i));
+%     
+% end
+
 num = 0;
-denom = 0;
+denom = 1;
 for i = 1:size(t,1)
-    num = num + weight(zs(i)) * (g(zs(i)+1) - t(i));
-    denom = denom + weight(zs(i));
-    
+    num = num + ((g(zs(i)+1) - t(i)));
 end
 
-e = exp(num / denom);
+e = exp(double(num) / denom);
 
 
 

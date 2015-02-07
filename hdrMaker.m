@@ -66,9 +66,8 @@ for j = 1:numimgs
     end
 end
 
-
 % pick your favourite lambda
-l = 5;
+l = 2;
 
 [gR, leR] = gsolve(Z(:,:,1),B,l);
 [gG, leG] = gsolve(Z(:,:,2),B,l);
