@@ -1,33 +1,27 @@
 % below is hdr code. works 100% of the time all the time
 
-% read in the input file (TODO::: pass in the file name)
+% read in the input file
 filename = 'inputs/imageInfo.txt';
-[imagefiles, fstops] = textread(filename, '%s %s');
 
-%would be nice to auto get this, but too much work right now
-img_width = 1024;
-img_height = 768;
+%textread is depcrecated, but textscan returns a cell array and I don't
+%understand them well enough to make it work
+[imagefiles, shutters] = textread(filename, '%s %s');
 
 numimgs = size(imagefiles);
 
-images = zeros(numimgs);
+images = cell(numimgs);
 
-%%OVERFLOWS MEMORY, NOT SURE WHY
-%%maybe because using some weird data type, we only need/want uint8 (8
-%%bits)
 for i = 1:numimgs    
-    
-    i
-    %prealloc image space
-    images(i) = zeros(img_width*img_height);
     
     %append file directory loc
     imageloc = strcat('inputs/',imagefiles(i));
     
     %read in this image
-    imgmatrix = imread(char(imageloc));
+    imgmatrix = uint8(imread(char(imageloc)));
     
     %store in big images matrix
-    images(i) = imgmatrix;
+    images{i} = uint8(imgmatrix);
 end
 
+%images is now a cell array with each cell containing the entire
+%3xwidthxheight image
