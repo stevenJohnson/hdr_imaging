@@ -75,4 +75,6 @@ l = 2;
 
 output = getHDRimg(gR,gG,gB,images,B(1,:));
 
-image(output)
+image_rgb = tonemap(output);
+figure;
+image(image_rgb);
