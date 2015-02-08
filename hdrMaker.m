@@ -75,6 +75,29 @@ l = 2;
 
 output = getHDRimg(gR,gG,gB,images,B(1,:));
 
-image_rgb = tonemap(output);
+tonemapped = zeros(imageY,imageX,3);
+
+% tonemap hack
+for j = 1:imageY
+    for i = 1:imageX
+        Rval = output(j,i,1);
+        Gval = output(j,i,2);
+        Bval = output(j,i,3);
+        
+        Rtmp = abs(gR - Rval);
+        Gtmp = abs(gG - Gval);
+        Btmp = abs(gB - Bval);
+        
+        [~, Ridx] = min(Rtmp);
+        [~, Gidx] = min(Gtmp);
+        [~, Bidx] = min(Btmp);
+        
+        tonemapped(j,i,1) = Ridx;
+        tonemapped(j,i,2) = Gidx;
+        tonemapped(j,i,3) = Bidx;
+    end
+end
+
+%image_rgb = tonemap(output);
 figure;
-image(image_rgb);
+image(tonemapped);
