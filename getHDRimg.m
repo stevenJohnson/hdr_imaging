@@ -7,6 +7,7 @@ imageY = size(images, 2);
 
 dispic = zeros(imageY,imageX,3);
 
+%keyboard
 for y = 1:imageY
     for x = 1:imageX
         
@@ -18,9 +19,11 @@ for y = 1:imageY
         dispic(y,x,1) = getRadiance(gR,t,rs);
         dispic(y,x,2) = getRadiance(gG,t,gs);
         dispic(y,x,3) = getRadiance(gB,t,bs);
-        
     end
 end
+
+index = find(isnan(dispic) | isinf(dispic));
+dispic(index) = 0;
 
 end
 

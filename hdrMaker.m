@@ -12,7 +12,7 @@ numimgs = size(imagefiles,1);
 imageX = 1024;
 imageY = 768;
 
-scalefactor = .5;
+scalefactor = .03;
 
 images = zeros(numimgs(1), imageY, imageX, 3);
 
@@ -20,6 +20,8 @@ simageX = ceil(imageX*scalefactor);
 simageY = ceil(imageY*scalefactor);
 
 imagessmall = zeros(numimgs(1), simageY, simageX, 3);
+
+sizeX = 15; sizeY = 20;
 
 for i = 1:numimgs
     
@@ -33,7 +35,7 @@ for i = 1:numimgs
     images(i,:,:,:) = uint8(imgmatrix);
     
     % also store in scaled images matrix
-    tmp = (imresize(imgmatrix, scalefactor));
+    tmp = (imresize(imgmatrix, scalefactor, 'bilinear'));
     imagessmall(i,:,:,:) = tmp;
 end
 
@@ -45,8 +47,8 @@ disp('set up images.');
 %%%%%% here is scaling sampling method
 
 % take m pixels in y direction and n pixels in x direction in a grid
-m = 30;
-n = 30;
+m = sizeY;
+n = sizeX;
 
 xs = floor(linspace(1, simageX, n));
 ys = floor(linspace(1, simageY, m));
