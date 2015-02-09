@@ -15,4 +15,9 @@ if x > (zmax+zmin)/2
 else
     w = x - zmin;
 end
+
+if w == 0
+    w = 1;
+end
+
 end

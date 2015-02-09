@@ -128,13 +128,13 @@ disp('sampled.');
 % end
 
 % pick your favourite lambda
-l = 4;
+l = 10;
 
+disp('starting solver.');
 [gR, leR] = gsolve(Z(:,:,1),B,l);
 [gG, leG] = gsolve(Z(:,:,2),B,l);
 [gB, leB] = gsolve(Z(:,:,3),B,l);
 
-disp('starting solver.');
 output = getHDRimg(gR,gG,gB,images,B(1,:));
 
 % tonemapped = zeros(imageY,imageX,3);
@@ -165,7 +165,7 @@ output = getHDRimg(gR,gG,gB,images,B(1,:));
 % image(uint8(tonemapped));
 figure;
 hold on;
-plot(gR); plot(gG); plot(gB);
+plot(gR,'color','red'); plot(gG,'color','green'); plot(gB,'color','blue');
 
 figure;
 image(tonemap(output));

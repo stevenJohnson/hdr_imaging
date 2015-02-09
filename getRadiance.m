@@ -13,7 +13,7 @@ for i = 1:size(t,1)
     
 end
 if denom==0
-    denom = 1;
+    num = 0;
 end
 % num = 0;
 % denom = 1;
