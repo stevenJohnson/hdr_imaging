@@ -22,6 +22,7 @@ for y = 1:imageY
     end
 end
 
+%%%% No index is found here, can remove this stuff
 index = find(isnan(dispic) | isinf(dispic));
 dispic(index) = 0;
 

@@ -1,31 +1,43 @@
-% below is hdr code. works 100% of the time all the time
+%HDRMAKER Takes a set of exposures and creates a visually appealling HDR
+%image.
+%   Below is hdr code. works 100% of the time all the time
+
+%% File Setup
+disp('Beginning HDR image construction from exposures and images in ./');
+
+filename = 'inputs/imageInfo.txt';
+disp(filename);
 
 % read in the input file
-filename = 'inputs/imageInfo.txt';
-
 %textread is depcrecated, but textscan returns a cell array and I don't
 %understand them well enough to make it work
 [imagefiles, shutters] = textread(filename, '%s %f');
 
-numimgs = size(imagefiles,1);
+disp('Image filenames and shutter times acquired.');
 
-imageX = 1024;
-imageY = 768;
+%Number of exposures
+N = size(imagefiles,1);
+
+%% Set Image Dimensions Here!!
+width = 1024;
+height = 768;
+
+%% Read in images to MATLAB memory, set up sampling of scaled calibration points
+
+%Initialize memory needed for all images
+images = zeros(N(1), height, width, 3);
 
 scalefactor = .03;
 
-images = zeros(numimgs(1), imageY, imageX, 3);
+scaled_width = ceil(width*scalefactor);
+scaled_height = ceil(height*scalefactor);
 
-simageX = ceil(imageX*scalefactor);
-simageY = ceil(imageY*scalefactor);
+scaled_images = zeros(N(1), scaled_height, scaled_width, 3);
 
-imagessmall = zeros(numimgs(1), simageY, simageX, 3);
-
-sizeX = 15; sizeY = 20;
-
-for i = 1:numimgs
+disp('Reading images into matrix memory...');
+for i = 1:N
     
-    %append file directory loc
+    %append file directory location
     imageloc = strcat('inputs/',imagefiles(i));
     
     %read in this image
@@ -36,22 +48,22 @@ for i = 1:numimgs
     
     % also store in scaled images matrix
     tmp = (imresize(imgmatrix, scalefactor, 'bilinear'));
-    imagessmall(i,:,:,:) = tmp;
+    scaled_images(i,:,:,:) = tmp;
 end
 
-disp('set up images.');
+disp('All full and scaled images read into memory');
 
-%images is now a cell array with each cell containing the entire
-%3xwidthxheight image
+%% Scaling Sampling Method
 
-%%%%%% here is scaling sampling method
+disp('Beginning Scaled Sampling');
 
+sizeX = 15; sizeY = 20;
 % take m pixels in y direction and n pixels in x direction in a grid
 m = sizeY;
 n = sizeX;
 
-xs = floor(linspace(1, simageX, n));
-ys = floor(linspace(1, simageY, m));
+xs = floor(linspace(1, scaled_width, n));
+ys = floor(linspace(1, scaled_height, m));
 
 numpixels = m*n;
 coords = zeros(numpixels, 2);
@@ -64,18 +76,18 @@ for j = 1:m
 end
 
 % set up Z and % get log of exposure time
-Z = zeros(numpixels, numimgs, 3);
-B = zeros(numpixels, numimgs);
+Z = zeros(numpixels, N, 3);
+B = zeros(numpixels, N);
 
-for j = 1:numimgs
+for j = 1:N
     for i = 1:numpixels
         % get the location
         locX = coords(i,1); locY = coords(i,2);
         
         % get the rgb in the location from the picture
-        r = imagessmall(j,locY,locX,1);
-        g = imagessmall(j,locY,locX,2);
-        b = imagessmall(j,locY,locX,3);
+        r = scaled_images(j,locY,locX,1);
+        g = scaled_images(j,locY,locX,2);
+        b = scaled_images(j,locY,locX,3);
         
         Z(i,j,1) = r;
         Z(i,j,2) = g;
@@ -86,15 +98,10 @@ for j = 1:numimgs
     end
 end
 
-disp('sampled.');
+disp('Sampling for all images completed.');
 
-%%%%%% here is end of scaling sampling method
-
-
-
-
-% 
-% 
+ 
+%% Our manual pixel sampling read-in and acquisition 
 % % read in selected pixels
 % sfilename = 'inputs/selectedPixels.txt';
 % 
@@ -129,16 +136,20 @@ disp('sampled.');
 %     end
 % end
 
-% pick your favourite lambda
-l = 10;
+%% Pick your favorite lambda
+lambda = 10;
 
-disp('starting solver.');
-[gR, leR] = gsolve(Z(:,:,1),B,l);
-[gG, leG] = gsolve(Z(:,:,2),B,l);
-[gB, leB] = gsolve(Z(:,:,3),B,l);
+%% Linear System Solving
+disp('Starting solver.');
+[gR, leR] = gsolve(Z(:,:,1),B,lambda);
+[gG, leG] = gsolve(Z(:,:,2),B,lambda);
+[gB, leB] = gsolve(Z(:,:,3),B,lambda);
+disp('System solved.');
 
+%% DO HDR!!!
 output = getHDRimg(gR,gG,gB,images,B(1,:));
 
+%% Our attempted tonemapping method
 % tonemapped = zeros(imageY,imageX,3);
 % 
 % % tonemap hack
@@ -165,9 +176,19 @@ output = getHDRimg(gR,gG,gB,images,B(1,:));
 % %image_rgb = tonemap(output);
 % figure;
 % image(uint8(tonemapped));
+
+
+%% Plotting Camera Response Curve
 figure;
 hold on;
 plot(gR,'color','red'); plot(gG,'color','green'); plot(gB,'color','blue');
+xlim([0 255]);
+xlabel('RGB Intensity');
+ylabel('ln(E) + ln(t)');
+plot_title = sprintf('RGB Camera Response Curves with lambda = %d', lambda);
+legend('Red channel','Green channel','Blue channel','Location', 'SouthEast');
+title(plot_title);
 
+%% Displaying final image using MATLAB tonemap
 figure;
 image(tonemap(output));
