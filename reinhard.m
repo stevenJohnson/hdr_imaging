@@ -5,7 +5,7 @@ function [ output ] = reinhard ( hdr, a )
 output = zeros(size(hdr,1),size(hdr,2),size(hdr,3));
 
 N = size(hdr,1)*size(hdr,2);
-delta = .1;
+delta = .0001;
 
 for i=1:size(hdr,3)
     

@@ -129,3 +129,4 @@ title(plot_title);
 %% Displaying final image using MATLAB tonemap
 figure;
 image(reinhard(output, alpha));
+
