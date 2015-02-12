@@ -143,4 +143,5 @@ final_image = reinhard(output, alpha);
 %% Displaying final image using MATLAB tonemap
 figure;
 image(final_image);
+%figure;image((reinhard(output,0.18)+drago(output))/2); title('the best method');
 toc %time for entire program execution

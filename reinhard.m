@@ -1,6 +1,7 @@
 function [ output ] = reinhard ( hdr, a ) 
 %%
 %Typical alphas range from 0.045 to 0.72
+% we use 0.18
 
 output = zeros(size(hdr,1),size(hdr,2),size(hdr,3));
 
