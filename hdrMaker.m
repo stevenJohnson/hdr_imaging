@@ -60,7 +60,7 @@ for i = 1:N
     % also store in scaled images matrix
     tmp = (imresize(imgmatrix, scalefactor, 'bilinear'));
     scaled_images(i,:,:,:) = tmp;
-    
+
     imageloc %display most recently read-in image
 end
 
