@@ -138,8 +138,9 @@ title(plot_title);
 disp('Beginning HDR image construction.');
 output = getHDRimg(gR,gG,gB,images,B(1,:));
 disp('HDR image construction complete.');
+final_image = reinhard(output, alpha);
 
 %% Displaying final image using MATLAB tonemap
 figure;
-image(reinhard(output, alpha));
+image(final_image);
 toc %time for entire program execution
