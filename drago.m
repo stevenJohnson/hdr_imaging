@@ -4,7 +4,7 @@ function [ output ] = drago ( hdr )
 ldmax = 100;
 
 % b is a bias parameter (usually .5 to 1.0 range)
-b = .75;
+b = .95;
 
 output = zeros(size(hdr,1),size(hdr,2),size(hdr,3));
 
@@ -15,24 +15,39 @@ delta = .0001;
 xyz = rgb2xyz(hdr);
 
 % world adaptation luminance
-L_wa = exp((1/N)*(sum(sum(log(xyz(:,:,2) + delta)))))
+L_wa = exp((1/N)*(sum(sum(log(xyz(:,:,2) + delta)))));
+L_wa = L_wa / ((1+b-.85) ^ 5);
 
 L_wmax = max(max(xyz(:,:,2)));
-L_wmax = L_wmax / L_wa % scale the max by the adaptation luminance
+L_wmax = L_wmax / L_wa; % scale the max by the adaptation luminance
 
 
 % calculate display luminances
 for y = 1:size(output,1)
     for x = 1:size(output,2)
-        L_w = xyz(y,x,2);
+        L_w = xyz(y,x,2) / L_wa;
         
         leftN = ldmax * .01;
-        leftD = log(10, L_wmax + 1);
+        leftD = log10(L_wmax + 1);
+        left = double(leftN) / double(leftD);
         
+        rightN = log(L_w + 1);
+        rightexp = log(b) / log(.5);
+        rightIn = L_w / L_wmax;
+        rightD = log(2 + (( rightIn ^ rightexp ) * 8));
+        right = double(rightN) / double(rightD);
+        
+        lD = left * right;
+        
+        %disp('_');
+        lD;
+        L_w;
+        
+        
+        xyz(y,x,2) = lD;
     end
 end
 
-
-output = xyz;
+output = xyz2rgb(xyz);
 
 end

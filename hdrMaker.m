@@ -12,7 +12,7 @@ sizeX = 15; sizeY = 20;
 %% File Setup
 disp('Beginning HDR image construction from exposures and images in ./');
 
-%filename = 'inputs/testInfo.txt';
+filename = 'inputs/testInfo.txt';
 %filename = 'inputs/second_floorInfo.txt';
 %filename = 'inputs/SteenbocksInfo.txt';
 disp(filename);
@@ -58,6 +58,7 @@ for i = 1:N
     % also store in scaled images matrix
     tmp = (imresize(imgmatrix, scalefactor, 'bilinear'));
     scaled_images(i,:,:,:) = tmp;
+    imageloc
 end
 
 disp('All full and scaled images read into memory.');
