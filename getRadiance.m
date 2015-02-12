@@ -10,17 +10,7 @@ for i = 1:size(t,2)
     num = num + (weight(zs(i)) * (g(zs(i)+1) - t(i)));
     denom = denom + weight(zs(i));
 end
-% if denom==0
-%     e = 0;
-%     return;
-%     num = 0;
-% end
-% num = 0;
-% denom = 1;
-% for i = 1:size(t,1)
-%     num = num + ((g(zs(i)+1) - t(i)));
-% end
-% 
+
 e = exp(double(num) / denom);
 
 end

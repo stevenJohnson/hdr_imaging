@@ -1,6 +1,6 @@
 function [ rgb_float ] = Yxy2RGB( yxy_image )
-%UNTITLED9 Summary of this function goes here
-%   Detailed explanation goes here
+%Yxy2RGB Convert from Yxy to RGB...
+%   Self-Explanatory
 
 eps = 0.000001;
 

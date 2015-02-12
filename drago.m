@@ -1,4 +1,5 @@
 function [ output ] = drago ( hdr )
+%drago Drago tonemapping algorithm
 
 %ldmax is a scale factor (100 is commonly used)
 ldmax = 100;
