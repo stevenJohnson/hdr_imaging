@@ -1,13 +1,14 @@
 function [ dispic ] = getHDRimg( gR,gG,gB, images, t )
-%GETHDRIMG Summary of this function goes here
-%   Detailed explanation goes here
+%GETHDRIMG Create HDR image
+%   Create HDR image from camera response curves and exposures
+%   images, t is ordered array of expsures and exposure times
+%   gR,gG,gB are camera response curves
 
 imageX = size(images, 3);
 imageY = size(images, 2);
 
 dispic = zeros(imageY,imageX,3);
 
-%keyboard
 for y = 1:imageY
     for x = 1:imageX
         
@@ -22,7 +23,7 @@ for y = 1:imageY
     end
 end
 
-%%%% No index is found here, can remove this stuff
+%%%% No index is found here, can prob remove this stuff
 index = find(isnan(dispic) | isinf(dispic));
 dispic(index) = 0;
 
