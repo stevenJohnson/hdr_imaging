@@ -3,10 +3,7 @@
 %   Below is hdr code. works 100% of the time all the time
 
 %% Set Parameters
-width = 1024;
-height = 768;
-
-alpha = 0.72;
+alpha = 0.18;
 lambda = 10;
 
 scalefactor = .03;
@@ -15,13 +12,21 @@ sizeX = 15; sizeY = 20;
 %% File Setup
 disp('Beginning HDR image construction from exposures and images in ./');
 
-filename = 'inputs/imageInfo.txt';
+%filename = 'inputs/testInfo.txt';
+%filename = 'inputs/second_floorInfo.txt';
+%filename = 'inputs/SteenbocksInfo.txt';
 disp(filename);
 
 % read in the input file
 %textread is depcrecated, but textscan returns a cell array and I don't
 %understand them well enough to make it work
 [imagefiles, shutters] = textread(filename, '%s %f');
+dir = imagefiles(1);
+width = str2num(cell2mat(imagefiles(2)));
+height = shutters(2);
+
+imagefiles(1) = []; shutters(1) = [];
+imagefiles(1) = []; shutters(1) = [];
 
 disp('Image filenames and shutter times acquired.');
 
@@ -42,7 +47,7 @@ disp('Reading images into matrix memory...');
 for i = 1:N
     
     %append file directory location
-    imageloc = strcat('inputs/',imagefiles(i));
+    imageloc = strcat('inputs/',dir,'/',imagefiles(i));
     
     %read in this image
     imgmatrix = uint8(imread(char(imageloc)));
