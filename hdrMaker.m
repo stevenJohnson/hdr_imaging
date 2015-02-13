@@ -2,6 +2,8 @@
 %image.
 %   Below is hdr code. works 100% of the time all the time
 
+%% TIMER
+tic; %start stopwatch
 %% Set Parameters
 alpha = 0.18;
 lambda = 10;
@@ -12,7 +14,7 @@ sizeX = 15; sizeY = 20;
 %% File Setup
 disp('Beginning HDR image construction from exposures and images in ./');
 
-%filename = 'inputs/testInfo.txt';
+filename = 'inputs/testInfo.txt';
 %filename = 'inputs/second_floorInfo.txt';
 %filename = 'inputs/SteenbocksInfo.txt';
 disp(filename);
@@ -58,8 +60,11 @@ for i = 1:N
     % also store in scaled images matrix
     tmp = (imresize(imgmatrix, scalefactor, 'bilinear'));
     scaled_images(i,:,:,:) = tmp;
+
+    imageloc %display most recently read-in image
 end
 
+toc %time reading in and scaling
 disp('All full and scaled images read into memory.');
 
 %% Scaling Sampling Method
@@ -106,6 +111,7 @@ for j = 1:N
     end
 end
 
+toc %time subsampling
 disp('Sampling for all images completed.');
 
 %% Linear System Solving
@@ -113,12 +119,9 @@ disp('Starting solver.');
 [gR, leR] = gsolve(Z(:,:,1),B,lambda);
 [gG, leG] = gsolve(Z(:,:,2),B,lambda);
 [gB, leB] = gsolve(Z(:,:,3),B,lambda);
-disp('System solved.');
 
-%% DO HDR!!!
-disp('Beginning HDR image construction.');
-output = getHDRimg(gR,gG,gB,images,B(1,:));
-disp('HDR image construction complete.');
+toc %time System Solving
+disp('System solved.');
 
 %% Plotting Camera Response Curve
 figure;
@@ -131,7 +134,14 @@ plot_title = sprintf('RGB Camera Response Curves with lambda = %d', lambda);
 legend('Red channel','Green channel','Blue channel','Location', 'SouthEast');
 title(plot_title);
 
+%% DO HDR!!!
+disp('Beginning HDR image construction.');
+output = getHDRimg(gR,gG,gB,images,B(1,:));
+disp('HDR image construction complete.');
+final_image = reinhard(output, alpha);
+
 %% Displaying final image using MATLAB tonemap
 figure;
-image(reinhard(output, alpha));
-
+image(final_image);
+%figure;image((reinhard(output,0.18)+drago(output))/2); title('the best method');
+toc %time for entire program execution
