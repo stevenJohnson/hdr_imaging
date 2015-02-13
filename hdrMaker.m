@@ -17,6 +17,8 @@ disp('Beginning HDR image construction from exposures and images in ./');
 filename = 'inputs/testInfo.txt';
 %filename = 'inputs/second_floorInfo.txt';
 %filename = 'inputs/SteenbocksInfo.txt';
+%filename = 'inputs/WhitesMoveInfo.txt';
+%filename = 'inputs/StevensNightInfo.txt';
 disp(filename);
 
 % read in the input file
