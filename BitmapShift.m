@@ -1,4 +1,4 @@
-function [ output_bmp ] = BitmapShift( input_img, x_shift, y_shift )
+function [ output_bmp ] = BitmapShift( input_img, y_shift, x_shift )
 %BitmapShift Shift input by x_shift,y_shift
 %   Exposed borders are zero'd.
 

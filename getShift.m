@@ -1,14 +1,14 @@
 function [ out_shifts ] = getShift( image1, image2, shift_bits )
-%getShift Summary of this function goes here
-%   Detailed explanation goes here
+%getShift Get shift with two grayscale images
+%   recursive
 
 % Noise tolerance for within median
-tolerance = 4;
+tolerance = 0;
 
 height = size(image1, 1);
 width = size(image1, 2);
 
-%TODO
+
 if shift_bits > 0
     smaller1 = imgShrink2(image1);
     smaller2 = imgShrink2(image2);
