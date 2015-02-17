@@ -13,7 +13,6 @@ for i=1:size(hdr,3)
     Lwhite = max(max(hdr(:,:,i)));
 
     L_w = exp((1/N)*(sum(sum(log(hdr(:,:,i) + delta)))));
-    
     output(:,:,i) = alpha*hdr(:,:,i)/L_w;
 
     for y=1:size(output,1)

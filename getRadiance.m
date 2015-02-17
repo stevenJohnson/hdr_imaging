@@ -1,17 +1,14 @@
 function [ e ] = getRadiance( g, t, zs )
-%GETRADIANCE get the radiance of a single channel of a single pixel
-%   g is the camera response function for that channel (r,g,or b)
+%GETRADIANCE get the radiance of a all channels of all pixels
+%   g is the camera response function for all channels
 %   t is the array of shutter speeds
-%   zs is the array of intensities for that pixel location
+%   zs is the array of intensities for all pixels
 
-num = 0;
-denom = 0;
-for i = 1:size(t,2)
-    num = num + (weight(zs(i)) * (g(zs(i)+1) - t(i)));
-    denom = denom + weight(zs(i));
-end
+w = weight(zs);
 
-e = exp(double(num) / denom);
+num = sum((w.*(g(zs+1)-t(:,ones(size(zs,2),1),ones(size(zs,3),1),ones(size(zs,4),1)))));
+denom = sum(w);
+
+e = squeeze(exp(double(num) ./ denom));
 
 end
-

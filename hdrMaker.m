@@ -17,8 +17,8 @@ disp('Beginning HDR image construction from exposures and images in ./');
 %filename = 'inputs/testInfo.txt';
 %filename = 'inputs/second_floorInfo.txt';
 %filename = 'inputs/SteenbocksInfo.txt';
-filename = 'inputs/WhitesMoveInfo.txt';
-%filename = 'inputs/StevensNightInfo.txt';
+%filename = 'inputs/WhitesMoveInfo.txt';
+filename = 'inputs/StevensNightInfo.txt';
 disp(filename);
 
 % read in the input file
@@ -92,7 +92,7 @@ end
 
 % set up Z and % get log of exposure time
 Z = zeros(numpixels, N, 3);
-B = zeros(numpixels, N);
+B = zeros(N,1);
 
 for j = 1:N
     for i = 1:numpixels
@@ -108,9 +108,10 @@ for j = 1:N
         Z(i,j,2) = g;
         Z(i,j,3) = b;
         
-        % put in the log exposure time
-        B(i,j) = log(shutters(j));
     end
+    
+    % put in the log exposure time
+    B(j) = log(shutters(j));
 end
 
 toc %time subsampling
@@ -121,7 +122,7 @@ disp('Starting solver.');
 [gR, leR] = gsolve(Z(:,:,1),B,lambda);
 [gG, leG] = gsolve(Z(:,:,2),B,lambda);
 [gB, leB] = gsolve(Z(:,:,3),B,lambda);
-
+g = [gR, gG, gB];
 toc %time System Solving
 disp('System solved.');
 
@@ -138,7 +139,7 @@ title(plot_title);
 
 %% DO HDR!!!
 disp('Beginning HDR image construction.');
-output = getHDRimg(gR,gG,gB,images,B(1,:));
+output = getHDRimg(g, images,B);
 disp('HDR image construction complete.');
 final_image = reinhard(output, alpha);
 

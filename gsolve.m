@@ -1,5 +1,8 @@
 % gsolve.m ? Solve for imaging system response function
 %
+% EDIT 2/16/15 by Ronak Mehta
+% Removed extra unnecessary dimension from B, exposure times
+%
 % Given a set of pixel values observed for several pixels in several
 % images with different exposure times, this function returns the
 % imaging system?s response function g as well as the log film irradiance
@@ -33,7 +36,7 @@ k = 1;
 for i = 1:size(Z,1)
     for j=1:size(Z,2)
         wij = weight(Z(i,j)+1);
-        A(k,Z(i,j)+1) = wij; A(k,n+i) = -wij; b(k,1) = wij * B(i,j);
+        A(k,Z(i,j)+1) = wij; A(k,n+i) = -wij; b(k,1) = wij * B(j);
         k=k+1;
     end
 end
